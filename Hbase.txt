@@ -1,0 +1,67 @@
+HBASE Queries:
+
+open the terminal and type: hbase shell
+
+– Creating an External Table in Hive
+ CREATE EXTERNAL TABLE unstructured_data (line STRING)
+ ROW FORMAT DELIMITED
+ FIELDS TERMINATEDBY'\n'
+ LOCATION'/user/hadoop/';
+
+– Transforming Unstructured Data to Structured Format:
+ CREATE TABLE structured_data (id INT, name STRING, age INT, department STRING);
+ INSERT INTO structured_data
+ SELECT
+ CAST(SPLIT(line, ',')[0] AS INT) AS id,
+ SPLIT(line, ',')[1] AS name,
+ CAST(SPLIT(line, ',')[2] AS INT) AS age,
+ SPLIT(line, ',')[3] AS department
+ FROM unstructured_data;
+ Develop Hive and HBase Databases, Tables, Views, Functions, and Indexes:
+
+– Create a Database
+ CREATE DATABASE company_db;
+ USE company_db;
+
+– Create Tables
+ CREATE TABLE employees (id INT, name STRING, age INT, department STRING);
+
+– Create View
+CREATE VIEW young_employees AS
+ SELECT*FROM employees WHERE age<30;
+
+–CreateaFunction
+ CREATE FUNCTION calculate_bonus AS 'com.company.udf.CalculateBonus';
+
+–CreateanIndex
+ CREATE INDEX age_idx ONTABLE employees(age)AS'COMPACT'WITHDEFERRED
+ REBUILD;
+
+
+Example 2:
+
+--Create Table
+create 'employee', 'personal_info', 'job_info'
+
+--Describe Table
+describe 'employee'
+
+--Alter Table
+alter 'employee', {NAME => 'performance_info'}
+
+--Insert Table
+put 'employee', 'emp1', 'personal_info:name', 'John Doe'
+put 'employee', 'emp1', 'personal_info:age', '30'
+put 'employee', 'emp1', 'job_info:role', 'Software
+Developer'
+put 'employee', 'emp1', 'job_info:salary', '75000'
+put 'employee', 'emp1', 'performance_info:rating', 'A'
+
+--Get Cells
+get 'employee', 'emp1'
+get 'employee', 'emp1', {COLUMN => 'job_info:role'}
+
+--Display
+scan 'employee', {STARTROW => 'emp1', ENDROW =>
+'emp5', TIMESTAMP => 'timestamp_range'}
+scan ‘employee’

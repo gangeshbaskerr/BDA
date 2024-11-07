@@ -1,0 +1,85 @@
+Pig Queries:
+
+Save the commands in a .pig file , say sample_script.pig
+
+In the terminal type command:
+pig - x local sample_script.pig
+
+-- Load the data
+ EMPLOYEE=LOAD'employee.txt' USING PigStorage(',') AS (id:int, name:chararray, age:int,
+ department:chararray);
+
+-- Sort by age
+ SORTED_EMPLOYEE=ORDER EMPLOYEE BY age;
+ DUMPSORTED_EMPLOYEE;
+
+-- Group by department
+ GROUPED_EMPLOYEE=GROUP EMPLOYEE BY department;
+ DUMPGROUPED_EMPLOYEE;
+
+-- Assuming another dataset for departments
+ DEPARTMENT=LOAD'department.txt' USING PigStorage(',') AS (dept_id:int,
+ dept_name:chararray)
+
+-- Join the employee and department
+ JOINED_DATA = JOIN EMPLOYEE BY department, DEPARTMENT BY dept_name;
+ DUMPJOINED_DATA;
+
+-- Project name and age
+ PROJECTED_DATA =FOREACH EMPLOYEE GENERATE name,age;
+ DUMPPROJECTED_DATA;
+
+-- Filter employees older than 30
+ FILTERED_EMPLOYEE =FILTER EMPLOYEE BY age>30;
+ DUMPFILTERED_EMPLOYEE;
+
+
+Example 2:
+
+Save the commands in a .pig file , say sample_script.pig
+
+In the terminal command:
+pig - x local sample_script.pig
+
+Sample datasets:
+
+employee.csv:
+eid,name,role,salary
+1,John Doe,Software Developer,75000
+2,Jane Smith,Project Manager,85000
+3,Bob Johnson,System Analyst,65000
+
+ Loading
+employees = LOAD 'path/to/employee.csv' USING
+PigStorage(',') AS (eid: int, name: chararray, role:
+chararray, salary: float);
+
+ Describing
+DESCRIBE employees;
+
+ Filtering
+sde_employees = FILTER employees BY role == 'Software
+Developer';
+
+ Grouping
+grouped_employees = GROUP employees BY role;
+
+ Joining
+personal_info = LOAD 'path/to/personal_info.csv'
+USING PigStorage(',') AS (eid: int, city: chararray, school:
+chararray, score: int);
+joined_data = JOIN employees BY eid, personal_info BY
+eid;
+
+ Counting
+role_counts = FOREACH grouped_employees
+GENERATE group AS role, COUNT(employees) AS
+employee_count;
+
+ Projecting
+employee_details = FOREACH joined_data GENERATE
+employees::name AS employee_name, employees::role AS
+employee_role, personal_info::city AS city;
+
+ Dumping
+DUMP employee_details;

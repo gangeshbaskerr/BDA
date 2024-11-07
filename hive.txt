@@ -1,0 +1,76 @@
+Hive Queries
+
+
+Open terminal and type: hive
+
+-- Create a table
+ CREATE TABLE employee (id INT, name STRING, age INT, department STRING);
+
+-- Insert some sample data
+ INSERT INTO employee VALUES (1, 'John', 30, 'HR');
+ INSERT INTO employee VALUES (2, 'Alice', 25, 'Finance');
+ INSERT INTO employee VALUES (3, 'Bob', 35, 'HR');
+
+-- Sort by age
+ SELECT * FROM employee ORDER BY age;-- Group employees by department
+ SELECT department, COUNT(*) AS total_employees
+ FROM employee
+ GROUPBY department;
+
+-- Create another table for department details
+ CREATE TABLE department (dept_id INT, dept_name STRING);
+
+-- Insert some data
+ INSERT INTO department VALUES (1, 'HR');
+ INSERT INTO department VALUES (2, 'Finance');
+
+-- Join employee and department tables
+ SELECT e.id, e.name, d.dept_name
+ FROM employee e
+ JOIN department d
+ ONe.department = d.dept_name;
+
+-- Select specific columns (Projection)
+ SELECT id, name FROM employee;
+
+-- Filter employees older than 30
+ SELECT *FROM employee WHEREage>30;
+
+
+Example 2:
+
+1) Create Employee Table:
+
+CREATE TABLE employee (
+eid INT,
+name STRING,
+role STRING,
+salary FLOAT
+) ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ',' ;
+
+2)Insert DATA:
+LOAD DATA LOCAL INPATH '/path/to/employee_data.txt' INTO TABLE employee;
+
+2.5)DESCRIBE DATA:
+describe employee;
+
+3)Select Records:
+SELECT * FROM employee;
+
+4)Filtering:
+SELECT * FROM employee WHERE role = 'SDE';
+
+5)Grouping:
+SELECT role, COUNT(*) FROM employee GROUP BY role;
+
+6)Sorting:
+SELECT * FROM employee ORDER BY salary DESC;
+
+7)Join Query:
+SELECT e.name, e.role, p.city
+FROM employee e
+JOIN personal p ON e.eid = p.id;
+
+8)Specific column Extraction:
+SELECT name, salary FROM employee;
